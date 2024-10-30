@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+from st_aggrid import AgGrid, GridOptionsBuilder
 
 # Load the CSV data or use example data if file load fails
 try:
@@ -32,18 +32,21 @@ col3.metric("Recall", "89.0%")
 col4.write("🏆")
 col4.metric("F1 Score", "90.0%")
 
-# Alerts Table with Filtering Options and Icon
+# Custom Alerts Table with AgGrid
 st.header("📊 Anomaly/Security Alerts")
-severity_filter = st.selectbox("Filter by Severity", options=['All', 'Low', 'Medium', 'High'])
-alert_type_filter = st.selectbox("Filter by Alert Type", options=['All', 'Port Scan', 'Brute Force', 'DDoS', 'Malware'])
 
-filtered_data = data.copy()
-if severity_filter != 'All':
-    filtered_data = filtered_data[filtered_data['severity'] == severity_filter]
-if alert_type_filter != 'All':
-    filtered_data = filtered_data[filtered_data['alert_type'] == alert_type_filter]
+# Set up AgGrid options for better styling
+gb = GridOptionsBuilder.from_dataframe(data)
+gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
+gb.configure_side_bar()  # Add a sidebar with filters
+gb.configure_default_column(editable=False, groupable=True)
+gb.configure_column("severity", cellStyle={"color": "black", "backgroundColor": "lightcoral"})
+gb.configure_column("alert_type", cellStyle={"color": "black", "backgroundColor": "lightblue"})
+gb.configure_column("source", cellStyle={"color": "black", "backgroundColor": "lightyellow"})
+gb.configure_column("destination", cellStyle={"color": "black", "backgroundColor": "lightgreen"})
 
-st.dataframe(filtered_data)  # Display filtered data
+grid_options = gb.build()
+AgGrid(data, gridOptions=grid_options, theme="material", height=400, fit_columns_on_grid_load=True)
 
 # Traffic Analysis with Icon
 st.header("📈 Traffic Analysis")
