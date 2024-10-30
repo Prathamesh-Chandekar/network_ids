@@ -1,7 +1,4 @@
-# utils.py
-
-import pandas as pd
-
 def extract_features(file):
-    # Dummy function for feature extraction (replace with actual feature extraction)
-    return [len(file.getvalue()), 0.1, 0.2]  # Example: file size and dummy features
+    # Dummy example for generating consistent feature length (ensure same as model training)
+    features = [0.1] * 10  # Replace with actual feature extraction logic
+    return features[:10]  # Adjust to match the exact number expected by the model
