@@ -48,8 +48,8 @@ if uploaded_file:
 
     # Predict Malware or Benign
     st.subheader("🧠 Model Prediction")
-    prediction = model.predict([features])[0]
-    prediction_proba = model.predict_proba([features])[0]
+    prediction = model.predict([features])[10]
+    prediction_proba = model.predict_proba([features])[10]
 
     # Display Results
     if prediction == 1:
