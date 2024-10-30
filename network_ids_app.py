@@ -45,18 +45,16 @@ gb = GridOptionsBuilder.from_dataframe(filtered_data)
 gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
 gb.configure_side_bar()  # Add a sidebar with filters
 gb.configure_default_column(editable=False, groupable=True, wrapText=True)  # Wrap text to make content visible
-# Apply different background colors based on severity
-gb.configure_column("severity", cellStyle=lambda x: {
-    "Low": {"color": "black", "backgroundColor": "lightgreen"},
-    "Medium": {"color": "black", "backgroundColor": "lightyellow"},
-    "High": {"color": "black", "backgroundColor": "lightcoral"}
-}.get(x.value, {"color": "black", "backgroundColor": "lightgrey"}))
-gb.configure_column("alert_type", cellStyle={"color": "black", "backgroundColor": "lightblue"})
-gb.configure_column("source", cellStyle={"color": "black", "backgroundColor": "lightyellow"})
-gb.configure_column("destination", cellStyle={"color": "black", "backgroundColor": "lightgreen"})
+# Apply background colors for severity levels with simpler styling logic
+severity_colors = {
+    "Low": "lightgreen",
+    "Medium": "lightyellow",
+    "High": "lightcoral"
+}
+gb.configure_column("severity", cellStyle={"color": "black", "backgroundColor": severity_colors.get("Low", "lightgrey")})
 
 grid_options = gb.build()
-AgGrid(filtered_data, gridOptions=grid_options, theme="material", height=400, fit_columns_on_grid_load=True)
+AgGrid(filtered_data, gridOptions=grid_options, theme="material", height=400)
 
 # Traffic Analysis with Icon
 st.header("📈 Traffic Analysis")
