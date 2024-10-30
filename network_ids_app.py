@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load the CSV data
-data = pd.read_csv('/mnt/data/alerts.csv')
+data = pd.read_csv('alerts.csv')
 
 # Define the main app title
 st.title("Network Intrusion Detection System (NIDS) Dashboard with AI/ML")
