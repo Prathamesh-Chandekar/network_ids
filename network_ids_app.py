@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # Load the CSV data
 try:
-    data = pd.read_csv('/mnt/data/alerts.csv')
+    data = pd.read_csv('alerts.csv')
 except Exception as e:
     st.error("Could not load the uploaded data. Please check the file format.")
     # Example data to show the visualization
