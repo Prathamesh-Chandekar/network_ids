@@ -39,7 +39,7 @@ st.header("📊 Anomaly/Security Alerts")
 gb = GridOptionsBuilder.from_dataframe(data)
 gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
 gb.configure_side_bar()  # Add a sidebar with filters
-gb.configure_default_column(editable=False, groupable=True)
+gb.configure_default_column(editable=False, groupable=True, wrapText=True)  # Wrap text to make content visible
 gb.configure_column("severity", cellStyle={"color": "black", "backgroundColor": "lightcoral"})
 gb.configure_column("alert_type", cellStyle={"color": "black", "backgroundColor": "lightblue"})
 gb.configure_column("source", cellStyle={"color": "black", "backgroundColor": "lightyellow"})
