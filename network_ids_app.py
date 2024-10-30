@@ -32,29 +32,21 @@ col3.metric("Recall", "89.0%")
 col4.write("🏆")
 col4.metric("F1 Score", "90.0%")
 
-# Filter option for severity
-st.sidebar.header("Filter Options")
-selected_severity = st.sidebar.multiselect("Select Severity Level(s)", options=data['severity'].unique(), default=data['severity'].unique())
-filtered_data = data[data['severity'].isin(selected_severity)]
-
 # Custom Alerts Table with AgGrid
 st.header("📊 Anomaly/Security Alerts")
 
 # Set up AgGrid options for better styling
-gb = GridOptionsBuilder.from_dataframe(filtered_data)
+gb = GridOptionsBuilder.from_dataframe(data)
 gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
 gb.configure_side_bar()  # Add a sidebar with filters
 gb.configure_default_column(editable=False, groupable=True, wrapText=True)  # Wrap text to make content visible
-# Apply background colors for severity levels with simpler styling logic
-severity_colors = {
-    "Low": "lightgreen",
-    "Medium": "lightyellow",
-    "High": "lightcoral"
-}
-gb.configure_column("severity", cellStyle={"color": "black", "backgroundColor": severity_colors.get("Low", "lightgrey")})
+gb.configure_column("severity", cellStyle={"color": "black", "backgroundColor": "lightcoral"})
+gb.configure_column("alert_type", cellStyle={"color": "black", "backgroundColor": "lightblue"})
+gb.configure_column("source", cellStyle={"color": "black", "backgroundColor": "lightyellow"})
+gb.configure_column("destination", cellStyle={"color": "black", "backgroundColor": "lightgreen"})
 
 grid_options = gb.build()
-AgGrid(filtered_data, gridOptions=grid_options, theme="material", height=400)
+AgGrid(data, gridOptions=grid_options, theme="material", height=400, fit_columns_on_grid_load=True)
 
 # Traffic Analysis with Icon
 st.header("📈 Traffic Analysis")
@@ -63,12 +55,11 @@ if 'timestamp' in data.columns:
     traffic_count = data.groupby(data['timestamp'].dt.date).size()
     st.line_chart(traffic_count, width=0, height=400)
 
-# Severity Distribution with Custom Colors
+# Severity Distribution
 if 'severity' in data.columns:
     st.subheader("Severity Distribution of Alerts")
     severity_counts = data['severity'].value_counts()
-    severity_colors = {"Low": "green", "Medium": "yellow", "High": "red"}
-    st.bar_chart(severity_counts.rename_axis("Severity").reset_index(name="Count"), color=[severity_colors[sev] for sev in severity_counts.index])
+    st.bar_chart(severity_counts)
 
 # Source/Destination Analysis
 if 'source' in data.columns and 'destination' in data.columns:
@@ -83,4 +74,4 @@ if 'source' in data.columns and 'destination' in data.columns:
 
 # Additional options
 if st.checkbox("Show Detailed Data Summary"):
-    st.write(filtered_data.describe())
+    st.write(data.describe())
